@@ -3,8 +3,9 @@ version: "3.8"
 services:
   web:
     image: php:apache
-    volumes:
-      - "./app:/var/www/html"
+    - type: bind
+        source: ./app
+        target: /var/www/html
     ports:
       - "80:80"
     deploy:
