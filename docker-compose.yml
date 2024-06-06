@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  web:
+    image: elmouinysaleh/apache-mysqli
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          memory: 50M
+    ports:
+      - 80:80
+    volumes:
+      - ./app:/var/www/html
+    environment:
+      - APACHE_LOG_DIR=/var/log/apache2
+
+  db:
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=mysecretpassword
+      - MYSQL_DATABASE=mydatabase
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          memory: 200M
+    volumes:
+      - ./app/init.sql:/docker-entrypoint-initdb.d/init.sql
